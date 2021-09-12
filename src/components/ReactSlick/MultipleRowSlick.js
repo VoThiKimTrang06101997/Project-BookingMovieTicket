@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component} from "react";
 import Slider from "react-slick";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import styleSlick from "../ReactSlick/MultipleRowSlick.module.css";
@@ -6,6 +6,7 @@ import Film from "../Film/Film";
 import Film_Flip from "../Film/Film_Flip";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_PHIM_DANG_CHIEU } from "../../redux/types/QuanLyPhimType";
+
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -35,7 +36,14 @@ const MultipleRowSlick = (props) => {
   const { dangChieu, sapChieu } = useSelector(
     (state) => state.QuanLyPhimReducer
   );
+  
+
+
   const renderFilms = () => {
+    const { item } = props;
+    const { data } = props;
+    
+
     return props.arrFilm.slice(0, 12).map((item, index) => {
       return (
         <div className="mt-2" key={index}>
