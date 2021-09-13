@@ -14,7 +14,6 @@ export const HomeTemplate = (props) => { // path, exact, Component
         // props.location, props.history, props.match
         return <Fragment>
             <Header {...propsRoute}/>
-            <HomeCarousel {...propsRoute}/>
             <Component {...propsRoute}/>
             <TixApp/>
             <hr/>
