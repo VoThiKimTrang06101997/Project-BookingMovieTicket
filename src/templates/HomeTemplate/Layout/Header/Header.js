@@ -1,14 +1,17 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import Logo from "../../../../assets/img/web-logo.png";
+import { history } from "../../../../App";
+
 
 export default function Header(props) {
+  
     return (
         <header class="p-4 bg-coolGray-800 text-coolGray-100 bg-opacity-80 bg-black text-white fixed w-full z-10">
             <div class="container flex justify-between h-16 mx-auto">
-                <a href="#" aria-label="Back to homepage" class="flex items-center p-2">
+                <NavLink to="/" aria-label="Back to homepage" class="flex items-center p-2">
                     <img src={Logo} alt="Logo" />
-                </a>
+                </NavLink>
 
                 <ul class="items-stretch hidden space-x-3 lg:flex">
                     <li class="flex">
@@ -26,8 +29,11 @@ export default function Header(props) {
                 </ul>
 
                 <div class="items-center flex-shrink-0 hidden lg:flex">
-                    <button class="self-center px-8 py-3 rounded">Sign in</button>
-                    <button class="self-center px-8 py-3 font-semibold rounded dark:bg-violet-400 dark:text-coolGray-900">Sign up</button>
+                    <button onClick={() => {
+                        history.push('/login')
+                    }}
+                        className="self-center px-8 py-3 rounded">Sign in</button>
+                    <button className="self-center px-8 py-3 font-semibold rounded dark:bg-violet-400 dark:text-coolGray-900">Sign up</button>
                 </div>
                 <button class="p-4 lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 dark:text-coolGray-100">
