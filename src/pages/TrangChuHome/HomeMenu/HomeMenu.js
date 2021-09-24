@@ -45,7 +45,7 @@ export default class HomeMenu extends React.PureComponent {
                                                 <p className="font-bold">{cumRap.diaChi}</p>
                                                 <div className="grid grid-cols-6 gap-6">
                                                     {phim.lstLichChieuTheoPhim?.slice(0, 12).map((lichChieu, index) => {
-                                                        return <NavLink className="text-1xl text-green-400" to="/" key={index}>
+                                                        return <NavLink className="text-1xl text-green-400" to={`/checkout/${lichChieu.maLichChieu}`} key={index}>
                                                             {moment(lichChieu.ngayChieuGioChieu).format('hh:mm A')}
                                                         </NavLink>
                                                     })}

@@ -14,6 +14,10 @@ import Checkout from './pages/Checkout/Checkout';
 import { Suspense, lazy } from "react";
 import { UserTemplate } from './templates/UserTemplate/UserTemplate';
 import Loading from './components/Loading/Loading';
+import Profile from './pages/Profile/Profile';
+import Dashboard from './pages/Admin/Dashboard/Dashboard';
+import Films from './pages/Admin/Films/Films';
+import AdminTemplate from './templates/AdminTemplate/AdminTemplate';
 
 
 const CheckoutTemplateLazy = lazy(() => import('./templates/CheckoutTemplate/CheckoutTemplate'))
@@ -23,19 +27,26 @@ export const history = createBrowserHistory();
 function App() {
   return (
     <Router history={history}>
-      <Loading/>
+      <Loading />
       <Switch>
         <HomeTemplate path="/home" exact Component={TrangChuHome} />
         <HomeTemplate path="/contact" exact Component={Contact} />
         <HomeTemplate path="/news" exact Component={News} />
         <HomeTemplate path="/detail/:id" exact Component={Detail} />
+        <HomeTemplate path="/profile" exact Component={Profile} />
 
-        <Route path="/register" exact Component={Register} />
 
-        <CheckoutTemplate path="/checkout/:id" exact Component={Checkout}/>
+        <CheckoutTemplate path="/checkout/:id" exact Component={Checkout} />
 
         <UserTemplate path="/login" exact Component={Login} />
+        <UserTemplate path="/register" exact Component={Register} />
 
+        <AdminTemplate path="/admin" exact Component={Dashboard} />
+        <AdminTemplate path="/admin/films" exact Component={Films} />
+        <AdminTemplate path="/admin/users" exact Component={Dashboard} />
+
+
+        <AdminTemplate path="/admin/users" exact Component={Dashboard} />
         {/* <Suspense fallback={<h1>LOADING....</h1>}>
           <CheckoutTemplateLazy path="/checkout/:id" exact Component={Checkout} />
         </Suspense> */}
@@ -49,3 +60,4 @@ function App() {
 }
 
 export default App;
+

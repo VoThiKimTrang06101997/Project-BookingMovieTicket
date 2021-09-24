@@ -17,6 +17,8 @@ import 'antd/dist/antd.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Import đa ngôn ngữ
+import './i18n'
 
 // ASP.Net vs Signal R: Đoạn Code để kết nối đến Server lắng nghe sự kiện từ Server
 export const connection = new signalR.HubConnectionBuilder().withUrl(`${DOMAIN}/DatVeHub`).configureLogging(signalR.LogLevel.Information).build();
