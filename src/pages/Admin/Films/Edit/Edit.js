@@ -13,26 +13,40 @@ import {
 } from "antd";
 import { useFormik } from "formik";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { themPhimUploadHinhAction } from "../../../../redux/actions/QuanLyPhimActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  layThongTinPhimAction,
+  themPhimUploadHinhAction,
+} from "../../../../redux/actions/QuanLyPhimActions";
 import { GROUPID } from "../../../../utilities/settings/config";
+import { useEffect } from "react";
 
-const AddNew = () => {
+const Edit = (props) => {
   const [componentSize, setComponentSize] = useState("default");
+  const { thongTinPhim } = useSelector((state) => state.QuanLyPhimReducer);
+  console.log("thongTinPhim", thongTinPhim);
+
   const [imgSrc, setImgSrc] = useState("");
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    let { id } = props.match.params;
+    dispatch(layThongTinPhimAction(id));
+  });
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      tenPhim: "",
-      trailer: "",
-      moTa: "",
-      ngayKhoiChieu: "",
-      dangChieu: false,
-      sapChieu: false,
-      hot: false,
-      danhGia: 0,
-      hinhAnh: {},
+      tenPhim: thongTinPhim?.tenPhim,
+      trailer: thongTinPhim.trailer,
+      moTa: thongTinPhim.moTa,
+      maNhom: GROUPID,
+      ngayKhoiChieu: thongTinPhim.ngayKhoiChieu,
+      dangChieu: thongTinPhim.dangChieu,
+      sapChieu: thongTinPhim.sapChieu,
+      hot: thongTinPhim.hot,
+      danhGia: thongTinPhim.danhGia,
+      hinhAnh: null,
     },
     onSubmit: (values) => {
       console.log("values", values);
@@ -52,8 +66,8 @@ const AddNew = () => {
   });
 
   const handleChangeDatePicker = (value) => {
-    // console.log("datepickerchange");
-    let ngayKhoiChieu = moment(value).format("DD/MM/YYYY");
+    // console.log('datepickerchange',);
+    let ngayKhoiChieu = moment(value);
     formik.setFieldValue("ngayKhoiChieu", ngayKhoiChieu);
   };
 
@@ -69,8 +83,8 @@ const AddNew = () => {
     };
   };
 
-  const handleChangeFile = (e) => {
-    // Lấy File từ event
+  const handleChangeFile = async (e) => {
+    //Lấy file ra từ e
     let file = e.target.files[0];
     if (
       file.type === "image/jpeg" ||
@@ -78,16 +92,16 @@ const AddNew = () => {
       file.type === "image/gif" ||
       file.type === "image/png"
     ) {
-      // Tạo đối tượng để đọc file
+      //Đem dữ liệu file lưu vào formik
+      await formik.setFieldValue("hinhAnh", file);
+      //Tạo đối tượng để đọc file
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        console.log(e.target.result);
-        setImgSrc(e.target.result); // Hình Base 64
+        // console.log(e.target.result);
+        setImgSrc(e.target.result); //Hình base 64
       };
     }
-    // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("hinhAnh", file);
   };
 
   const onFormLayoutChange = ({ size }) => {
@@ -111,7 +125,7 @@ const AddNew = () => {
         onValuesChange={onFormLayoutChange}
         size={componentSize}
       >
-        <h3 style={{ color: "red" }}>Thêm phim mới</h3>
+        <h3 style={{ color: "red" }}>Cập nhật phim</h3>
         <Form.Item label="Form Size" name="size">
           <Radio.Group>
             <Radio.Button value="small">Small</Radio.Button>
@@ -121,25 +135,50 @@ const AddNew = () => {
         </Form.Item>
 
         <Form.Item label="Tên phim">
-          <Input name="tenPhim" onChange={formik.handleChange} />
+          <Input
+            name="tenPhim"
+            onChange={formik.handleChange}
+            value={formik.values.tenPhim}
+          />
         </Form.Item>
         <Form.Item label="Trailer">
-          <Input name="trailer" onChange={formik.handleChange} />
+          <Input
+            name="trailer"
+            onChange={formik.handleChange}
+            value={formik.values.trailer}
+          />
         </Form.Item>
         <Form.Item label="Mô tả">
-          <Input name="moTa" onChange={formik.handleChange} />
+          <Input
+            name="moTa"
+            onChange={formik.handleChange}
+            value={formik.values.moTa}
+          />
         </Form.Item>
         <Form.Item label="Ngày khởi chiếu">
-          <DatePicker format={"DD/MM/YYYY"} onChange={handleChangeDatePicker} />
+          <DatePicker
+            onChange={handleChangeDatePicker}
+            format="DD/MM/YYYY"
+            value={moment(formik.values.ngayKhoiChieu)}
+          />
         </Form.Item>
         <Form.Item label="Đang chiếu">
-          <Switch onChange={handleChangeSwitch("dangChieu")} />
+          <Switch
+            onChange={handleChangeSwitch("dangChieu")}
+            checked={formik.values.dangChieu}
+          />
         </Form.Item>
         <Form.Item label="Sắp chiếu">
-          <Switch onChange={handleChangeSwitch("sapChieu")} />
+          <Switch
+            onChange={handleChangeSwitch("sapChieu")}
+            checked={formik.values.sapChieu}
+          />
         </Form.Item>
         <Form.Item label="Hot">
-          <Switch onChange={handleChangeSwitch("hot")} />
+          <Switch
+            onChange={handleChangeSwitch("hot")}
+            checked={formik.values.hot}
+          />
         </Form.Item>
 
         <Form.Item label="Đánh giá">
@@ -147,6 +186,7 @@ const AddNew = () => {
             onChange={handleChangeInputNumber("danhGia")}
             min={1}
             max={10}
+            value={formik.values.danhGia}
           />
         </Form.Item>
 
@@ -157,7 +197,11 @@ const AddNew = () => {
             accept="image/png, image/jpeg, image/gif"
           />
           <br />
-          <img style={{ width: 200, height: 150 }} src={imgSrc} alt="" />
+          <img
+            style={{ width: 200, height: 150 }}
+            src={imgSrc === "" ? thongTinPhim.hinhAnh : imgSrc}
+            alt=""
+          />
         </Form.Item>
 
         <Form.Item label="Tác vụ">
@@ -169,4 +213,4 @@ const AddNew = () => {
     </>
   );
 };
-export default AddNew;
+export default Edit;
