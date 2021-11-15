@@ -5,10 +5,10 @@ import {
 } from "../types/QuanLyPhimType";
 import { history } from "../../App";
 
-export const layDanhSachPhimAction = () => {
+export const layDanhSachPhimAction = (tenPhim="") => {
   return async (dispatch) => {
     try {
-      const result = await quanLyPhimService.layDanhSachPhim();
+      const result = await quanLyPhimService.layDanhSachPhim(tenPhim);
       // Sau khi lấy dữ liệu từ API về sẽ đưa lên => Redux / Reducers
       dispatch({
         type: SET_DANH_SACH_PHIM,
@@ -41,7 +41,6 @@ export const capNhatPhimUploadAction = (formData) => {
 
       dispatch(layDanhSachPhimAction());
       history.push("/admin/films");
-
     } catch (errors) {
       console.log(errors.response?.data);
     }
@@ -60,6 +59,20 @@ export const layThongTinPhimAction = (maPhim) => {
       });
     } catch (errors) {
       console.log("errors", errors);
+    }
+  };
+};
+
+export const xoaPhimAction = (maPhim) => {
+  return async (dispatch) => {
+    try {
+      const result = await quanLyPhimService.xoaPhim(maPhim);
+      console.log("result", result);
+      alert("Xóa phim thành công !!");
+      // Sau khi xóa load lại danh sách phim mới
+      dispatch(layDanhSachPhimAction());
+    } catch (errors) {
+      console.log("errors", errors.response?.data);
     }
   };
 };

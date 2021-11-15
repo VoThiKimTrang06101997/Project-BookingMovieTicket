@@ -12,7 +12,12 @@ export class QuanLyPhimService extends baseService {
     );
   };
 
-  layDanhSachPhim = () => {
+  layDanhSachPhim = (tenPhim = "") => {
+    if (tenPhim.trim() !== "") {
+      return this.get(
+        `/api/QuanLyPhim/LayDanhSachPhim?maNhom=${GROUPID}&tenPhim=${tenPhim}`
+      );
+    }
     return this.get(`/api/QuanLyPhim/LayDanhSachPhim?maNhom=${GROUPID}`);
   };
 
@@ -30,7 +35,7 @@ export class QuanLyPhimService extends baseService {
 
   xoaPhim = (maPhim) => {
     return this.delete(`/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`);
-  }
+  };
 }
 
 export const quanLyPhimService = new QuanLyPhimService();

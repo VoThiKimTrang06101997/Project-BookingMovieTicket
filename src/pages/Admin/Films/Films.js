@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect } from 'react'
 import { Button, Table } from 'antd';
 import { Input, Space } from 'antd';
-import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, DeleteOutlined, CalendarOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { layDanhSachPhimAction } from '../../../redux/actions/QuanLyPhimActions';
+import { layDanhSachPhimAction, xoaPhimAction } from '../../../redux/actions/QuanLyPhimActions';
 import { NavLink } from 'react-router-dom';
 import { history } from '../../../App';
 
@@ -73,8 +73,13 @@ export default function Films() {
                         // Gọi action xóa
                         if(window.confirm("Bạn có chắc muốn xóa phim" + film.tenPhim)) {
                             // Gọi action
+                            dispatch(xoaPhimAction(film.maPhim));
                         }
                     }}><DeleteOutlined style={{ color: 'red' }} /></span>
+
+                    <NavLink key={1} className="ml-2 text-2xl" to={`/admin/films/showtime/${film.maPhim}/${film.tenPhim}`} onClick={()=>{
+                        localStorage.setItem("filmParams", JSON.stringify(film));
+                    }}><CalendarOutlined style={{ color: 'green' }} /></NavLink>
                 </Fragment>
             },
             sortDirections: ['ascend', 'descend'],
@@ -85,10 +90,16 @@ export default function Films() {
     const data = arrFilmDefault;
 
 
-    const onSearch = value => console.log(value);
+    const onSearch = value => {
+        console.log(value);
+        // Gọi APi layDanhSachPhim
+        dispatch(layDanhSachPhimAction(value));
+    };
+
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
+
     return (
         <div>
             <h3 className="text-4xl">Quản lý Phim</h3>
