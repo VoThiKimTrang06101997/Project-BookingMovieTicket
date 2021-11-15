@@ -15,6 +15,8 @@ import { useFormik } from "formik";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  
+  capNhatPhimUploadAction,
   layThongTinPhimAction,
   themPhimUploadHinhAction,
 } from "../../../../redux/actions/QuanLyPhimActions";
@@ -37,6 +39,7 @@ const Edit = (props) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      maPhim: thongTinPhim.maPhim,
       tenPhim: thongTinPhim?.tenPhim,
       trailer: thongTinPhim.trailer,
       moTa: thongTinPhim.moTa,
@@ -48,6 +51,7 @@ const Edit = (props) => {
       danhGia: thongTinPhim.danhGia,
       hinhAnh: null,
     },
+
     onSubmit: (values) => {
       console.log("values", values);
       values.maNhom = GROUPID;
@@ -57,11 +61,15 @@ const Edit = (props) => {
         if (key !== "hinhAnh") {
           formData.append(key, values[key]);
         } else {
-          formData.append("File", values.hinhAnh, values.hinhAnh.name);
+          if (values.hinhAnh !== null) {
+            formData.append("File", values.hinhAnh, values.hinhAnh.name);
+          }
         }
       }
       // Gọi API gửi các giá trị formData về Backend xử lý
-      dispatch(themPhimUploadHinhAction(formData));
+
+      // Cập nhập phim upload hình
+      dispatch(capNhatPhimUploadAction(formData));
     },
   });
 
@@ -206,7 +214,7 @@ const Edit = (props) => {
 
         <Form.Item label="Tác vụ">
           <button type="submit" className="bg-blue-300 text-white p-2">
-            Thêm phim
+            Cập nhật
           </button>
         </Form.Item>
       </Form>

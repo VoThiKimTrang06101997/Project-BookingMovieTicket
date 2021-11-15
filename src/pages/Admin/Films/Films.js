@@ -69,7 +69,12 @@ export default function Films() {
             render: (text, film) => {
                 return <Fragment>
                     <NavLink key={1} className="mr-2 text-2xl" to={`/admin/films/edit/${film.maPhim}`}><EditOutlined style={{ color: 'blue' }} /></NavLink>
-                    <NavLink key={2} className="text-2xl" to="/"><DeleteOutlined style={{ color: 'red' }} /></NavLink>
+                    <span key={2} style={{cursor: "pointer"}} className="text-2xl" onClick={() => {
+                        // Gọi action xóa
+                        if(window.confirm("Bạn có chắc muốn xóa phim" + film.tenPhim)) {
+                            // Gọi action
+                        }
+                    }}><DeleteOutlined style={{ color: 'red' }} /></span>
                 </Fragment>
             },
             sortDirections: ['ascend', 'descend'],
@@ -97,7 +102,7 @@ export default function Films() {
                 size="large"
                 onSearch={onSearch}
             />
-            <Table columns={columns} dataSource={data} onChange={onChange} />
+            <Table columns={columns} dataSource={data} onChange={onChange} rowKey={"maPhim"} />
         </div>
     )
 }
